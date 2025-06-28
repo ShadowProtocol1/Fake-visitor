@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Visitor Bot Control Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚀 Visitor Bot</h1>
+      <p>Simulate realistic website traffic</p>
+    </div>
+    <div class="card">
+      <form id="visitorForm">
+        <div class="form-group">
+          <label for="url">🌐 Target Website</label>
+          <input type="url" id="url" name="url" placeholder="https://example.com" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="count">👥 Visitors</label>
+            <input type="number" id="count" name="count" placeholder="1" value="1" min="1" max="1000">
+          </div>
+
+          <div class="form-group">
+            <label for="delay">⏳ Delay Between Visits (ms)</label>
+            <input type="number" id="delay" name="delay" placeholder="1000" value="1000" min="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="waitTime">⏱️ Stay Time (ms)</label>
+            <input type="number" id="waitTime" name="waitTime" placeholder="Auto (5-20s)" min="1000">
+          </div>
+
+          <div class="form-group">
+            <label for="scrollCount">📜 Scroll Actions</label>
+            <input type="number" id="scrollCount" name="scrollCount" placeholder="3" value="3" min="1" max="10">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userAgent">🔧 User Agent</label>
+          <select id="userAgentSelect" name="userAgentSelect">
+            <option value="random">🎲 Random User Agent</option>
+            <option value="">Default Browser</option>
+            <option
+              value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36">
+              Chrome Windows</option>
+            <option
+              value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36">
+              Chrome Mac</option>
+            <option value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0">Firefox
+              Windows</option>
+            <option
+              value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15">
+              Safari Mac</option>
+            <option
+              value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36">
+              Chrome Linux</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input type="text" id="userAgent" name="userAgent" placeholder="Enter custom user agent..."
+            style="display: none;">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="viewportWidth">📱 Viewport Width</label>
+            <select id="viewportWidth" name="viewportWidth">
+              <option value="random">🎲 Random</option>
+              <option value="1920">🖥️ Desktop (1920px)</option>
+              <option value="1366">💻 Laptop (1366px)</option>
+              <option value="768">📱 Tablet (768px)</option>
+              <option value="375">📱 Mobile (375px)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="headless">👁️ Browser Mode</label>
+            <select id="headless" name="headless">
+              <option value="false">🔍 Visible (Slower)</option>
+              <option value="true">👻 Headless (Faster)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="proxy">🔒 Proxy (Optional)</label>
+          <input type="text" id="proxy" name="proxy" placeholder="ip:port (e.g., 127.0.0.1:8080)">
+        </div>
+
+        <div class="form-group">
+          <h2>🎯 Advanced Options</h2>
+          <div class="checkbox-group">
+            <label class="checkbox-label" for="randomizeActions">🎲 Randomize mouse movements
+              <input class="checkbox-input" type="checkbox" id="randomizeActions" name="randomizeActions" checked>
+            </label>
+            <label class="checkbox-label" for="simulateTyping">⌨️ Simulate typing (if input fields found)
+              <input class="checkbox-input" type="checkbox" id="simulateTyping" name="simulateTyping">
+            </label>
+            <label class="checkbox-label" for="clickLinks">🔗 Click random links (stay on same domain)
+              <input class="checkbox-input" type="checkbox" id="clickLinks" name="clickLinks">
+            </label>
+            <label class="checkbox-label" for="simulateReads">📖 Simulate reading (pause on text)
+              <input class="checkbox-input" type="checkbox" id="simulateReads" name="simulateReads" checked>
+            </label>
+            <label class="checkbox-label" for="cookieConsent">🍪 Auto-accept cookie banners
+              <input class="checkbox-input" type="checkbox" id="cookieConsent" name="cookieConsent" checked>
+            </label>
+            <label class="checkbox-label" for="screenshots">📸 Take screenshots (initial & final)
+              <input class="checkbox-input" type="checkbox" id="screenshots" name="screenshots">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>🌍 Location & Language</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="geolocation">📍 Geolocation (lat,lng)</label>
+              <input type="text" id="geolocation" name="geolocation" placeholder="40.7128,-74.0060 (NYC)">
+            </div>
+            <div class="form-group">
+              <label for="timezone">🕒 Timezone</label>
+              <select id="timezone" name="timezone">
+                <option value="">Default</option>
+                <option value="America/New_York">🇺🇸 Eastern Time</option>
+                <option value="America/Chicago">🇺🇸 Central Time</option>
+                <option value="America/Denver">🇺🇸 Mountain Time</option>
+                <option value="America/Los_Angeles">🇺🇸 Pacific Time</option>
+                <option value="Europe/London">🇬🇧 London</option>
+                <option value="Europe/Paris">🇫🇷 Paris</option>
+                <option value="Europe/Berlin">🇩🇪 Berlin</option>
+                <option value="Asia/Tokyo">🇯🇵 Tokyo</option>
+                <option value="Asia/Shanghai">🇨🇳 Shanghai</option>
+                <option value="Asia/Kolkata">🇮🇳 Mumbai</option>
+                <option value="Australia/Sydney">🇦🇺 Sydney</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="language">🌐 Browser Language</label>
+            <select id="language" name="language">
+              <option value="en-US">🇺🇸 English (US)</option>
+              <option value="en-GB">🇬🇧 English (UK)</option>
+              <option value="es-ES">🇪🇸 Spanish</option>
+              <option value="fr-FR">🇫🇷 French</option>
+              <option value="de-DE">🇩🇪 German</option>
+              <option value="it-IT">🇮🇹 Italian</option>
+              <option value="pt-BR">🇧🇷 Portuguese</option>
+              <option value="ru-RU">🇷🇺 Russian</option>
+              <option value="ja-JP">🇯🇵 Japanese</option>
+              <option value="ko-KR">🇰🇷 Korean</option>
+              <option value="zh-CN">🇨🇳 Chinese (Simplified)</option>
+              <option value="ar-SA">🇸🇦 Arabic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>🎛️ Traffic Patterns</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trafficPattern">📈 Traffic Pattern</label>
+              <select id="trafficPattern" name="trafficPattern">
+                <option value="constant">⚡ Constant</option>
+                <option value="burst">💥 Burst (all at once)</option>
+                <option value="gradual">📶 Gradual increase</option>
+                <option value="random">🎲 Random intervals</option>
+                <option value="peak">⛰️ Peak hours simulation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sessionDuration">⏰ Session Duration Range</label>
+              <select id="sessionDuration" name="sessionDuration">
+                <option value="short">⚡ Short (5-15s)</option>
+                <option value="medium">⏱️ Medium (15-60s)</option>
+                <option value="long">🕒 Long (1-5min)</option>
+                <option value="extended">🕰️ Extended (5-15min)</option>
+                <option value="custom">🎛️ Custom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" id="customSessionGroup" style="display: none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="minSession">⏱️ Min Session (ms)</label>
+              <input type="number" id="minSession" name="minSession" placeholder="5000" min="1000">
+            </div>
+            <div class="form-group">
+              <label for="maxSession">⏱️ Max Session (ms)</label>
+              <input type="number" id="maxSession" name="maxSession" placeholder="30000" min="1000">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>🎯 Behavior Simulation</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bounceRate">🏃 Bounce Rate (%)</label>
+              <input type="number" id="bounceRate" name="bounceRate" placeholder="50" min="0" max="100" value="30">
+            </div>
+            <div class="form-group">
+              <label for="returnVisitor">🔄 Return Visitor Rate (%)</label>
+              <input type="number" id="returnVisitor" name="returnVisitor" placeholder="20" min="0" max="100" value="15">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="deviceMix">📱 Device Mix</label>
+              <select id="deviceMix" name="deviceMix">
+                <option value="mixed">🎯 Mixed (60% Desktop, 30% Mobile, 10% Tablet)</option>
+                <option value="desktop">💻 Desktop Only</option>
+                <option value="mobile">📱 Mobile Only</option>
+                <option value="tablet">📱 Tablet Only</option>
+                <option value="custom">⚙️ Custom Mix</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="referrerType">🔗 Referrer Simulation</label>
+              <select id="referrerType" name="referrerType">
+                <option value="none">🚫 No Referrer</option>
+                <option value="search">🔍 Search Engines</option>
+                <option value="social">📱 Social Media</option>
+                <option value="direct">🎯 Direct Traffic</option>
+                <option value="mixed">🎲 Mixed Sources</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>🔧 Technical Options</h2>
+          <div class="checkbox-group">
+            <label class="checkbox-label" for="blockAds">🚫 Block Advertisements
+              <input class="checkbox-input" type="checkbox" id="blockAds" name="blockAds">
+            </label>
+            <label class="checkbox-label" for="blockTrackers">🛡️ Block Trackers
+              <input class="checkbox-input" type="checkbox" id="blockTrackers" name="blockTrackers">
+            </label>
+            <label class="checkbox-label" for="clearCache">🗑️ Clear cache before each visit
+              <input class="checkbox-input" type="checkbox" id="clearCache" name="clearCache">
+            </label>
+            <label class="checkbox-label" for="disableImages">🖼️ Disable image loading (faster)
+              <input class="checkbox-input" type="checkbox" id="disableImages" name="disableImages">
+            </label>
+            <label class="checkbox-label" for="disableCSS">🎨 Disable CSS loading (fastest)
+              <input class="checkbox-input" type="checkbox" id="disableCSS" name="disableCSS">
+            </label>
+            <label class="checkbox-label" for="jsExecution">⚡ Enable JavaScript execution
+              <input class="checkbox-input" type="checkbox" id="jsExecution" name="jsExecution" checked>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>📊 Analytics & Reporting</h2>
+          <div class="checkbox-group">
+            <label class="checkbox-label" for="detailedLogs">📝 Detailed logging
+              <input class="checkbox-input" type="checkbox" id="detailedLogs" name="detailedLogs">
+            </label>
+            <label class="checkbox-label" for="performanceMetrics">⚡ Collect performance metrics
+              <input class="checkbox-input" type="checkbox" id="performanceMetrics" name="performanceMetrics">
+            </label>
+            <label class="checkbox-label" for="errorReporting">❌ Enhanced error reporting
+              <input class="checkbox-input" type="checkbox" id="errorReporting" name="errorReporting">
+            </label>
+            <label class="checkbox-label" for="exportResults">💾 Export results to CSV
+              <input class="checkbox-input" type="checkbox" id="exportResults" name="exportResults">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>🎮 Custom Actions</h2>
+          <label for="customJS">⚡ Custom JavaScript Actions (one per line)</label>
+          <textarea id="customJS" name="customJS" rows="4" 
+                    placeholder="window.scrollTo(0, document.body.scrollHeight);&#10;document.querySelector('button').click();&#10;console.log('Custom action executed');"></textarea>
+          <small>⚠️ Advanced users only. JavaScript will be executed in the browser context.</small>
+        </div>
+
+        <div class="form-group">
+          <h2>💾 Presets</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loadPreset">📂 Load Preset</label>
+              <select id="loadPreset" name="loadPreset">
+                <option value="">Select a preset...</option>
+                <option value="basic">🔰 Basic Traffic</option>
+                <option value="ecommerce">🛒 E-commerce Site</option>
+                <option value="blog">📝 Blog/Content Site</option>
+                <option value="saas">💼 SaaS Application</option>
+                <option value="social">👥 Social Media</option>
+                <option value="news">📰 News Website</option>
+                <option value="gaming">🎮 Gaming Site</option>
+                <option value="mobile">📱 Mobile-First</option>
+                <option value="international">🌍 International Traffic</option>
+                <option value="stress">🔥 Stress Test</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="savePreset">💾 Save Current as Preset</label>
+              <input type="text" id="savePreset" name="savePreset" placeholder="My Custom Preset">
+              <button type="button" id="savePresetBtn" class="btn-secondary">💾 Save</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <span class="btn-text">🚀 Start Advanced Simulation</span>
+          <span class="btn-loader" style="display: none;">⏳ Running...</span>
+        </button>
+      </form>
+    </div>
+    <div class="status" id="status" style="display: none;"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+  <script>
+    const userAgentSelect = document.getElementById('userAgentSelect');
+    const userAgentInput = document.getElementById('userAgent');
+    const form = document.getElementById('visitorForm');
+    const status = document.getElementById('status');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoader = document.querySelector('.btn-loader');
+    const toastContainer = document.getElementById('toast-container');
+    const sessionDurationSelect = document.getElementById('sessionDuration');
+    const customSessionGroup = document.getElementById('customSessionGroup');
+    const loadPresetSelect = document.getElementById('loadPreset');
+    const savePresetBtn = document.getElementById('savePresetBtn');
+
+    // Presets configuration
+    const presets = {
+      basic: {
+        count: 10,
+        delay: 2000,
+        userAgentSelect: 'random',
+        headless: 'false',
+        scrollCount: 3,
+        randomizeActions: true,
+        simulateReads: true
+      },
+      ecommerce: {
+        count: 25,
+        delay: 1500,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 5,
+        randomizeActions: true,
+        simulateTyping: true,
+        clickLinks: true,
+        simulateReads: true,
+        sessionDuration: 'medium',
+        bounceRate: 25,
+        deviceMix: 'mixed'
+      },
+      blog: {
+        count: 50,
+        delay: 3000,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 8,
+        randomizeActions: true,
+        simulateReads: true,
+        sessionDuration: 'long',
+        bounceRate: 40,
+        deviceMix: 'mixed'
+      },
+      saas: {
+        count: 15,
+        delay: 2500,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 4,
+        randomizeActions: true,
+        simulateTyping: true,
+        clickLinks: true,
+        simulateReads: true,
+        sessionDuration: 'medium',
+        bounceRate: 20,
+        deviceMix: 'desktop'
+      },
+      social: {
+        count: 100,
+        delay: 1000,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 10,
+        randomizeActions: true,
+        clickLinks: true,
+        sessionDuration: 'short',
+        bounceRate: 60,
+        deviceMix: 'mobile'
+      },
+      news: {
+        count: 75,
+        delay: 2000,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 6,
+        randomizeActions: true,
+        simulateReads: true,
+        clickLinks: true,
+        sessionDuration: 'medium',
+        bounceRate: 35,
+        deviceMix: 'mixed'
+      },
+      gaming: {
+        count: 30,
+        delay: 1800,
+        userAgentSelect: 'random',
+        headless: 'false',
+        scrollCount: 3,
+        randomizeActions: true,
+        clickLinks: true,
+        sessionDuration: 'extended',
+        bounceRate: 15,
+        deviceMix: 'desktop'
+      },
+      mobile: {
+        count: 40,
+        delay: 1200,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 12,
+        randomizeActions: true,
+        simulateReads: true,
+        sessionDuration: 'short',
+        bounceRate: 55,
+        deviceMix: 'mobile'
+      },
+      international: {
+        count: 60,
+        delay: 2200,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 5,
+        randomizeActions: true,
+        simulateReads: true,
+        sessionDuration: 'medium',
+        bounceRate: 45,
+        deviceMix: 'mixed',
+        language: 'mixed'
+      },
+      stress: {
+        count: 200,
+        delay: 500,
+        userAgentSelect: 'random',
+        headless: 'true',
+        scrollCount: 2,
+        randomizeActions: false,
+        sessionDuration: 'short',
+        bounceRate: 70,
+        trafficPattern: 'burst'
+      }
+    };
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+
+      const icon = type === 'success' ? '✅' : '❌';
+      toast.innerHTML = `
+        <div class="toast-content">
+          <span class="toast-icon">${icon}</span>
+          <span class="toast-message">${message}</span>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Show toast with animation
+      setTimeout(() => toast.classList.add('show'), 100);
+
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
+    }
+
+    // Load preset functionality
+    function loadPreset(presetName) {
+      const preset = presets[presetName];
+      if (!preset) return;
+
+      Object.keys(preset).forEach(key => {
+        const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+        if (element) {
+          if (element.type === 'checkbox') {
+            element.checked = preset[key];
+          } else {
+            element.value = preset[key];
+          }
+        }
+      });
+
+      showToast(`Loaded "${presetName}" preset configuration`, 'success');
+    }
+
+    // Save preset functionality
+    function savePreset() {
+      const presetName = document.getElementById('savePreset').value.trim();
+      if (!presetName) {
+        showToast('Please enter a preset name', 'error');
+        return;
+      }
+
+      const formData = new FormData(form);
+      const presetData = Object.fromEntries(formData.entries());
+      
+      // Store in localStorage
+      const savedPresets = JSON.parse(localStorage.getItem('userPresets') || '{}');
+      savedPresets[presetName] = presetData;
+      localStorage.setItem('userPresets', JSON.stringify(savedPresets));
+
+      // Add to select options
+      const option = document.createElement('option');
+      option.value = `user_${presetName}`;
+      option.textContent = `👤 ${presetName}`;
+      loadPresetSelect.appendChild(option);
+
+      showToast(`Preset "${presetName}" saved successfully`, 'success');
+      document.getElementById('savePreset').value = '';
+    }
+
+    // Load user presets on page load
+    function loadUserPresets() {
+      const savedPresets = JSON.parse(localStorage.getItem('userPresets') || '{}');
+      Object.keys(savedPresets).forEach(presetName => {
+        const option = document.createElement('option');
+        option.value = `user_${presetName}`;
+        option.textContent = `👤 ${presetName}`;
+        loadPresetSelect.appendChild(option);
+      });
+    }
+
+    // Event listeners
+    userAgentSelect.addEventListener('change', function () {
+      if (this.value === 'custom') {
+        userAgentInput.style.display = 'block';
+        userAgentInput.value = '';
+      } else {
+        userAgentInput.style.display = 'none';
+        userAgentInput.value = this.value;
+      }
+    });
+
+    sessionDurationSelect.addEventListener('change', function () {
+      if (this.value === 'custom') {
+        customSessionGroup.style.display = 'block';
+      } else {
+        customSessionGroup.style.display = 'none';
+      }
+    });
+
+    loadPresetSelect.addEventListener('change', function () {
+      if (this.value.startsWith('user_')) {
+        const presetName = this.value.replace('user_', '');
+        const savedPresets = JSON.parse(localStorage.getItem('userPresets') || '{}');
+        const preset = savedPresets[presetName];
+        if (preset) {
+          Object.keys(preset).forEach(key => {
+            const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+            if (element) {
+              if (element.type === 'checkbox') {
+                element.checked = preset[key] === 'on' || preset[key] === true;
+              } else {
+                element.value = preset[key];
+              }
+            }
+          });
+          showToast(`Loaded user preset "${presetName}"`, 'success');
+        }
+      } else if (this.value) {
+        loadPreset(this.value);
+      }
+      this.value = ''; // Reset selection
+    });
+
+    savePresetBtn.addEventListener('click', savePreset);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Show loading state
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'inline';
+      form.querySelector('button').disabled = true;
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Convert numeric fields
+      data.count = parseInt(data.count || 1);
+      data.delay = parseInt(data.delay || 1000);
+      data.waitTime = parseInt(data.waitTime || 0);
+      data.scrollCount = parseInt(data.scrollCount || 3);
+      data.bounceRate = parseInt(data.bounceRate || 30);
+      data.returnVisitor = parseInt(data.returnVisitor || 15);
+
+      // Handle session duration
+      if (data.sessionDuration === 'custom') {
+        data.minSession = parseInt(data.minSession || 5000);
+        data.maxSession = parseInt(data.maxSession || 30000);
+      }
+
+      // Parse custom JavaScript actions
+      if (data.customJS) {
+        data.customActions = data.customJS.split('\n').filter(line => line.trim());
+      }
+
+      try {
+        const response = await fetch('/visit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        // Show success toast
+        showToast(result.message || `Successfully started ${result.count} visitor simulation(s)`, 'success');
+
+      } catch (error) {
+        // Show error toast
+        showToast(`Failed to start simulation: ${error.message}`, 'error');
+      } finally {
+        // Reset button state
+        setTimeout(() => {
+          btnText.style.display = 'inline';
+          btnLoader.style.display = 'none';
+          form.querySelector('button').disabled = false;
+        }, 2000);
+      }
+    });
+
+    // Load user presets on page load
+    loadUserPresets();
+  </script>
+</body>
+
+</html>
